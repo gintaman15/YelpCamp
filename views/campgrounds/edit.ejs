@@ -1,0 +1,90 @@
+<% layout('layouts/boilerplate') %>
+
+
+    <!-- <div class="row"> -->
+    <div class="col-md-8 offset-md-2 mb-3">
+
+
+        <div class="card shadow">
+            <div class="card-body">
+                <h5 class="text-center card-title">Edit <%= campground.title %>
+                </h5>
+
+                <form action="/campgrounds/<%= campground._id %>?_method=put" method="POST" novalidate
+                    class="validated-form" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label" for="title">Name</label>
+                        <input class="form-control" type="text" name="campground[title]" id="title"
+                            placeholder="Enter the camp name" value="<%= campground.title %>" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="location">Location</label>
+                        <input class="form-control" type="text" name="campground[location]" id="location"
+                            placeholder="Set the camp location" value="<%= campground.location %>" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Add images</label>
+                            <input class="form-control" name="image" type="file" id="image" multiple>
+                        </div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" name="campground[price]" id="price"
+                            aria-label="Amount (to the nearest dollar)" value="<%= campground.price %>" step="0.01"
+                            min="0" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <!-- <span class="input-group-text">.00</span> -->
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="decription">Description</label><br>
+                        <textarea class="form-control" name="campground[description]" id="description" cols="30"
+                            rows="5" placeholder="Enter the camp description"><%= campground.description %></textarea>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <div class="card-text mb-3">
+                        <% campground.images.forEach(function(img, i ) { %>
+                            <img src=<%=img.thumbnail%> alt="..." class="img-thumbnail">
+
+                            <input type="checkbox" name="deleteImages[]" id='image <%= i %>'
+                                value="<%= img.filename %>">
+                            <label for='deleteImage <%= i %>'>Delete</label>
+                            <% }) %>
+
+                    </div>
+
+
+                    <div class="text-center">
+                        <button class="btn btn-primary ">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+    <script>
+        (() => {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.validated-form');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
